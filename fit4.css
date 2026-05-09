@@ -172,10 +172,10 @@ body {
 .header-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
     margin-bottom: 10px;
-    gap: 10px;
+    padding: 0 120px;
 }
 
 h1 {
@@ -187,12 +187,12 @@ h1 {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.02em;
-    flex: 1;
 }
 
 /* Theme Toggle */
 .theme-toggle {
-    position: static;
+    position: absolute;
+    left: 0;
     flex-shrink: 0;
     background: var(--toggle-bg);
     border: 1px solid var(--border);
@@ -221,28 +221,22 @@ h1 {
 /* Tab Bar */
 .tab-bar {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     background: var(--surface);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 6px;
     margin-bottom: 24px;
-    width: fit-content;
-    max-width: 100%;
+    width: 100%;
+    max-width: 600px;
     margin-inline: auto;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     box-sizing: border-box;
 }
 
-.tab-bar::-webkit-scrollbar {
-    display: none;
-}
-
 .tab-btn {
-    padding: 10px 28px;
+    flex: 1;
+    padding: 10px 8px;
     font-size: 0.95rem;
     font-weight: 600;
     font-family: 'Vazirmatn', sans-serif;
@@ -1446,6 +1440,7 @@ input:focus-visible {
     #results { grid-template-columns: repeat(2, 1fr); }
     h1 { font-size: 2rem; }
     .theme-toggle .toggle-label { display: none; }
+    .header-row { padding: 0 60px; }
     .filter-btn { padding: 8px 16px; font-size: 0.85rem; }
     .planner-grid { grid-template-columns: repeat(2, 1fr); }
     .tab-btn { padding: 9px 18px; font-size: 0.88rem; }
@@ -1453,6 +1448,16 @@ input:focus-visible {
 
 @media (max-width: 600px) {
     body { padding: 20px 12px 12px; }
+    .header-row {
+        flex-direction: column;
+        padding: 0;
+        gap: 10px;
+        align-items: center;
+    }
+    .theme-toggle {
+        position: static;
+        align-self: flex-end;
+    }
     .input-row { flex-direction: column; }
     #results { grid-template-columns: 1fr; }
     h1 { font-size: 1.8rem; }
@@ -1467,8 +1472,12 @@ input:focus-visible {
 
 @media (max-width: 500px) {
     .planner-grid { grid-template-columns: 1fr; }
-    .tab-bar { width: calc(100vw - 40px); justify-content: flex-start; }
-    .tab-btn { flex-shrink: 0; }
+    .tab-bar { width: 100%; max-width: 100%; }
+    .tab-btn { padding: 9px 4px; font-size: 0.78rem; }
+}
+
+@media (max-width: 360px) {
+    .tab-btn { font-size: 0.72rem; }
 }
 
 /* =====================================================
