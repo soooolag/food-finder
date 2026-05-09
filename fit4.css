@@ -473,7 +473,8 @@ input[type="number"]::placeholder {
 }
 
 @keyframes cardEnter {
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .food-card:hover {
@@ -2126,14 +2127,14 @@ input:focus-visible {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.fav-tab-header { margin-bottom: 20px; }
-.fav-tab-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.fav-tab-header { margin-bottom: 20px; width: 100%; box-sizing: border-box; }
+.fav-tab-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%; }
 .fav-tab-title {
     font-size: clamp(1.3rem,4vw,1.8rem); font-weight: 700; margin: 0;
     background: linear-gradient(135deg,#f43f5e,#fb7185);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.fav-tab-sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fav-tab-sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
 .fav-tab-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 .fav-clear-all-btn {
