@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="جستجو و مقایسه ارزش غذایی مواد غذایی ایرانی بر اساس پروتئین و کربوهیدرات">
+    <title>Food Finder — جستجوی ارزش غذایی</title>
+    <link rel="stylesheet" href="fit4.css">
+</head>
+<body>
+<div class="container" role="main">
+
+    <!-- TAB BAR -->
+    <nav class="tab-bar" role="tablist" aria-label="بخش‌های اصلی">
+        <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-finder" data-tab="finder">🔍 Food Finder</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-planner" data-tab="planner">📅 Meal Planner</button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-favorites" data-tab="favorites">❤️ علاقه‌مندی‌ها</button>
+    </nav>
+
+    <!-- FOOD FINDER TAB -->
+    <div id="tab-finder" class="tab-content" role="tabpanel" aria-labelledby="tab-btn-finder">
+
+        <!-- HEADER -->
+        <header class="header-row">
+            <h1>Food Finder</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">
+                <span id="themeIcon" aria-hidden="true">🌙</span>
+                <span class="toggle-label" id="themeLabel">تیره</span>
+            </button>
+        </header>
+
+        <p class="subtitle">مقادیر به ازای ۱۰۰ گرم</p>
+
+        <!-- FORM -->
+        <section class="form-box" aria-label="جستجوی غذا">
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="protein">پروتئین (گرم)</label>
+                    <input type="number" id="protein" placeholder="0-100" min="0" max="100" inputmode="numeric">
+                </div>
+                <div class="input-group">
+                    <label for="carbs">کربوهیدرات (گرم)</label>
+                    <input type="number" id="carbs" placeholder="0-100" min="0" max="100" inputmode="numeric">
+                </div>
+            </div>
+
+            <!-- Inline validation message (جایگزین alert) -->
+            <div id="validationMsg" class="validation-msg" role="alert" aria-live="polite"></div>
+
+            <button class="search-btn" id="searchBtn">
+                <span id="searchBtnLabel">جستجو</span>
+                <span id="liveIndicator" class="live-dot" title="جستجوی زنده فعاله" aria-hidden="true"></span>
+            </button>
+        </section>
+
+        <!-- PERSIAN NAME SEARCH -->
+        <section class="name-search-box" aria-label="جستجو با نام">
+            <div class="name-search-wrapper">
+                <span class="name-search-icon" aria-hidden="true">🔎</span>
+                <input
+                    type="text"
+                    id="nameSearch"
+                    class="name-search-input"
+                    placeholder="جستجو با نام غذا... (مثلاً: مرغ، برنج)"
+                    autocomplete="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    inputmode="text"
+                    dir="rtl"
+                    aria-label="جستجوی نام غذا به فارسی"
+                >
+                <button class="name-search-clear" id="nameSearchClear" aria-label="پاک کردن" style="display:none">✕</button>
+            </div>
+            <div id="nameSearchResults" class="name-search-dropdown" role="listbox" aria-label="پیشنهادات جستجو" hidden></div>
+        </section>
+
+        <section class="filter-section" aria-label="فیلتر دسته‌بندی">
+            <div class="filter-label" id="filter-label">فیلتر بر اساس دسته‌بندی:</div>
+            <div class="filter-buttons" role="group" aria-labelledby="filter-label">
+                <button class="filter-btn active" data-category="all">🍽️ همه</button>
+                <button class="filter-btn" data-category="پروتئین حیوانی">🥩 پروتئین حیوانی</button>
+                <button class="filter-btn" data-category="لبنیات">🥛 لبنیات</button>
+                <button class="filter-btn" data-category="حبوبات">🫘 حبوبات</button>
+                <button class="filter-btn" data-category="غلات">🌾 غلات</button>
+                <button class="filter-btn" data-category="سبزیجات">🥦 سبزیجات</button>
+                <button class="filter-btn" data-category="میوه">🍎 میوه</button>
+                <button class="filter-btn" data-category="آجیل">🥜 آجیل</button>
+                <button class="filter-btn" data-category="غذای ایرانی">🍲 غذای ایرانی</button>
+                <button class="filter-btn" data-category="روغن و چربی">🫙 روغن و چربی</button>
+                <button class="filter-btn" data-category="نوشیدنی">🥤 نوشیدنی</button>
+                <button class="filter-btn" data-category="شیرینی و دسر">🍯 شیرینی و دسر</button>
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <div id="results" role="region" aria-live="polite" aria-label="نتایج جستجو"></div>
+
+    </div><!-- /tab-finder -->
+
+    <!-- MEAL PLANNER TAB -->
+    <div id="tab-planner" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-btn-planner">
+        <header class="planner-header">
+            <div class="planner-header-top">
+                <h2 class="planner-title">📅 برنامه غذایی روزانه</h2>
+                <button class="theme-toggle theme-toggle-alt" data-theme-btn aria-label="تغییر تم">
+                    <span class="theme-icon-alt" aria-hidden="true">🌙</span>
+                    <span class="toggle-label theme-label-alt">تیره</span>
+                </button>
+            </div>
+            <p class="planner-subtitle">وعده‌های خود را برنامه‌ریزی کنید</p>
+            <button class="bmr-open-btn" id="bmrOpenBtn" aria-haspopup="dialog">
+                ⚙️ تنظیم هدف روزانه
+            </button>
+        </header>
+
+        <!-- GOAL TRACKER — rendered by JS -->
+        <div class="goal-tracker" id="goalTracker" role="region" aria-label="پیشرفت هدف روزانه"></div>
+
+        <div id="day-totals" role="region" aria-label="مجموع روزانه"></div>
+        <div class="planner-grid">
+            <div class="planner-col">
+                <div class="planner-col-header">
+                    <span class="meal-icon" aria-hidden="true">☀️</span>
+                    <span>صبحانه</span>
+                </div>
+                <div class="planner-items" id="meal-breakfast" role="list" aria-label="صبحانه">
+                    <div class="planner-placeholder"><span>+ غذایی اضافه نشده</span></div>
+                </div>
+            </div>
+            <div class="planner-col">
+                <div class="planner-col-header">
+                    <span class="meal-icon" aria-hidden="true">🌤️</span>
+                    <span>ناهار</span>
+                </div>
+                <div class="planner-items" id="meal-lunch" role="list" aria-label="ناهار">
+                    <div class="planner-placeholder"><span>+ غذایی اضافه نشده</span></div>
+                </div>
+            </div>
+            <div class="planner-col">
+                <div class="planner-col-header">
+                    <span class="meal-icon" aria-hidden="true">🌙</span>
+                    <span>شام</span>
+                </div>
+                <div class="planner-items" id="meal-dinner" role="list" aria-label="شام">
+                    <div class="planner-placeholder"><span>+ غذایی اضافه نشده</span></div>
+                </div>
+            </div>
+            <div class="planner-col">
+                <div class="planner-col-header">
+                    <span class="meal-icon" aria-hidden="true">🍎</span>
+                    <span>میان‌وعده</span>
+                </div>
+                <div class="planner-items" id="meal-snack" role="list" aria-label="میان‌وعده">
+                    <div class="planner-placeholder"><span>+ غذایی اضافه نشده</span></div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /tab-planner -->
+
+    <!-- FAVORITES TAB -->
+    <div id="tab-favorites" class="tab-content hidden" role="tabpanel" aria-labelledby="tab-btn-favorites">
+        <header class="fav-tab-header">
+            <div class="fav-tab-top-row">
+                <h2 class="fav-tab-title">❤️ علاقه‌مندی‌های من</h2>
+                <button class="theme-toggle theme-toggle-alt" data-theme-btn aria-label="تغییر تم">
+                    <span class="theme-icon-alt" aria-hidden="true">🌙</span>
+                    <span class="toggle-label theme-label-alt">تیره</span>
+                </button>
+            </div>
+            <div class="fav-tab-sub-row">
+                <p class="fav-tab-subtitle" id="favSubtitle">غذاهای موردعلاقه‌ات اینجا ذخیره میشن</p>
+                <button class="fav-clear-all-btn" id="favClearAllBtn" aria-label="حذف همه علاقه‌مندی‌ها">
+                    پاک کردن همه
+                </button>
+            </div>
+        </header>
+
+        <!-- sort bar -->
+        <div class="fav-sort-bar" id="favSortBar">
+            <span class="fav-sort-label">مرتب‌سازی:</span>
+            <div class="fav-sort-btns">
+                <button class="fav-sort-btn active" data-sort="added">آخرین اضافه‌شده</button>
+                <button class="fav-sort-btn" data-sort="protein">بیشترین پروتئین</button>
+                <button class="fav-sort-btn" data-sort="calories">کمترین کالری</button>
+            </div>
+        </div>
+
+        <div id="favResults" class="fav-grid" role="region" aria-live="polite" aria-label="علاقه‌مندی‌ها"></div>
+    </div><!-- /tab-favorites -->
+
+    <!-- COMPARE BAR -->
+    <div id="compareBar" class="compare-bar" role="region" aria-label="مقایسه غذاها" aria-hidden="true">
+        <div class="compare-content">
+            <span id="compareCount" aria-live="polite">0 غذا انتخاب شده</span>
+            <button id="compareBtn" class="compare-btn" disabled aria-disabled="true">مقایسه</button>
+            <button id="clearCompareBtn" class="clear-compare-btn">پاک کردن</button>
+        </div>
+    </div>
+
+    <!-- COMPARE MODAL -->
+    <div id="compareModal" class="compare-modal" role="dialog" aria-modal="true" aria-label="مقایسه غذاها" aria-hidden="true">
+        <div class="compare-modal-content">
+            <div class="compare-modal-header">
+                <h2>مقایسه غذاها</h2>
+                <button class="close-modal" aria-label="بستن مودال">&times;</button>
+            </div>
+            <div id="compareChart"></div>
+            <div id="compareTable"></div>
+        </div>
+    </div>
+
+    <!-- BMR MODAL -->
+    <div id="bmrModal" class="bmr-modal" role="dialog" aria-modal="true" aria-label="تنظیم هدف روزانه" aria-hidden="true">
+        <div class="bmr-modal-content">
+            <div class="bmr-modal-header">
+                <h2>⚙️ تنظیم هدف روزانه</h2>
+                <button class="bmr-close-btn" id="bmrCloseBtn" aria-label="بستن">&times;</button>
+            </div>
+            <div class="bmr-modal-body">
+                <p class="bmr-desc">با وارد کردن اطلاعات خود، نیاز کالری روزانه‌ات محاسبه و به عنوان هدف تنظیم می‌شود.</p>
+
+                <div class="bmr-grid">
+                    <div class="bmr-field">
+                        <label for="bmrAge">سن (سال)</label>
+                        <input type="number" id="bmrAge" placeholder="مثلاً ۲۵" min="10" max="100" inputmode="numeric">
+                    </div>
+                    <div class="bmr-field">
+                        <label for="bmrWeight">وزن (کیلوگرم)</label>
+                        <input type="number" id="bmrWeight" placeholder="مثلاً ۷۰" min="30" max="300" inputmode="numeric">
+                    </div>
+                    <div class="bmr-field">
+                        <label for="bmrHeight">قد (سانتی‌متر)</label>
+                        <input type="number" id="bmrHeight" placeholder="مثلاً ۱۷۵" min="100" max="250" inputmode="numeric">
+                    </div>
+                    <div class="bmr-field">
+                        <label for="bmrGender">جنسیت</label>
+                        <select id="bmrGender">
+                            <option value="male">مرد</option>
+                            <option value="female">زن</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bmr-field bmr-field--full">
+                    <label for="bmrActivity">سطح فعالیت</label>
+                    <select id="bmrActivity">
+                        <option value="1.2">کم‌تحرک (بدون ورزش)</option>
+                        <option value="1.375">کمی فعال (ورزش ۱-۳ روز در هفته)</option>
+                        <option value="1.55" selected>نسبتاً فعال (ورزش ۳-۵ روز)</option>
+                        <option value="1.725">خیلی فعال (ورزش ۶-۷ روز)</option>
+                        <option value="1.9">فوق‌العاده فعال (ورزش سنگین روزانه)</option>
+                    </select>
+                </div>
+
+                <div class="bmr-field bmr-field--full">
+                    <label for="bmrGoal">هدف</label>
+                    <div class="bmr-goal-btns" role="group" aria-label="انتخاب هدف">
+                        <button class="bmr-goal-btn" data-goal="cut">🔥 کات (کاهش وزن)</button>
+                        <button class="bmr-goal-btn active" data-goal="maintain">⚖️ حفظ وزن</button>
+                        <button class="bmr-goal-btn" data-goal="bulk">📈 حجم (افزایش وزن)</button>
+                    </div>
+                </div>
+
+                <div id="bmrResult" class="bmr-result" aria-live="polite"></div>
+
+                <div class="bmr-actions">
+                    <button class="bmr-calc-btn" id="bmrCalcBtn">محاسبه و تنظیم هدف</button>
+                    <button class="bmr-reset-btn" id="bmrResetBtn">پاک کردن هدف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /container -->
+
+<script src="fit4.js"></script>
+</body>
+</html>
