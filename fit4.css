@@ -172,9 +172,10 @@ body {
 .header-row {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     position: relative;
     margin-bottom: 10px;
+    gap: 10px;
 }
 
 h1 {
@@ -186,12 +187,13 @@ h1 {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.02em;
+    flex: 1;
 }
 
 /* Theme Toggle */
 .theme-toggle {
-    position: absolute;
-    left: 0;
+    position: static;
+    flex-shrink: 0;
     background: var(--toggle-bg);
     border: 1px solid var(--border);
     border-radius: 50px;
@@ -227,7 +229,16 @@ h1 {
     padding: 6px;
     margin-bottom: 24px;
     width: fit-content;
+    max-width: 100%;
     margin-inline: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    box-sizing: border-box;
+}
+
+.tab-bar::-webkit-scrollbar {
+    display: none;
 }
 
 .tab-btn {
@@ -473,8 +484,7 @@ input[type="number"]::placeholder {
 }
 
 @keyframes cardEnter {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .food-card:hover {
@@ -1457,8 +1467,8 @@ input:focus-visible {
 
 @media (max-width: 500px) {
     .planner-grid { grid-template-columns: 1fr; }
-    .tab-bar { width: 100%; }
-    .tab-btn { flex: 1; text-align: center; }
+    .tab-bar { width: calc(100vw - 40px); justify-content: flex-start; }
+    .tab-btn { flex-shrink: 0; }
 }
 
 /* =====================================================
@@ -2127,14 +2137,14 @@ input:focus-visible {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.fav-tab-header { margin-bottom: 20px; width: 100%; box-sizing: border-box; }
-.fav-tab-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%; }
+.fav-tab-header { margin-bottom: 20px; }
+.fav-tab-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .fav-tab-title {
     font-size: clamp(1.3rem,4vw,1.8rem); font-weight: 700; margin: 0;
     background: linear-gradient(135deg,#f43f5e,#fb7185);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.fav-tab-sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.fav-tab-sub-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .fav-tab-subtitle { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 .fav-clear-all-btn {
