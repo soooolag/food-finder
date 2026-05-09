@@ -39,14 +39,10 @@
 همه داده‌ها و برنامه غذایی‌ات در مرورگر ذخیره میشن و بعد از بستن و باز کردن مرورگر هم باقی میمونن
 
 ---
+DEMO=====
 
-## 🚀 Usage
 
-No installation needed. Just open `fit4.html` in your browser.
-
-```
-open fit4.html → start using
-```
+### [مشاهده دمو زنده پروژه (کلیک کنید)(https://soooolag.github.io/food-finder/index.html)
 
 ---
 
