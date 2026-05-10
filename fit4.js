@@ -368,24 +368,24 @@ const categoryEmoji = {
 };
 
 const mealKeys = {
-    breakfast: 'صبحانه',
-    lunch:     'ناهار',
-    dinner:    'شام',
-    snack:     'میان‌وعده'
+    breakfast: 'Breakfast',
+    lunch:     'Lunch',
+    dinner:    'Dinner',
+    snack:     'Snacks'
 };
 
 const mealIcons = {
-    breakfast: '☀️',
-    lunch:     '🌤️',
-    dinner:    '🌙',
-    snack:     '🍎'
+    breakfast: '',
+    lunch:     '',
+    dinner:    '',
+    snack:     ''
 };
 
 const fitnessConfig = {
-    'عضله‌سازی': { icon: '💪', cls: 'fit-muscle' },
-    'کات':       { icon: '🔥', cls: 'fit-cut' },
-    'حجم‌گیری': { icon: '📈', cls: 'fit-bulk' },
-    'تعادل':     { icon: '⚖️', cls: 'fit-balance' }
+    'عضله‌سازی': { icon: '', cls: 'fit-muscle', label: 'Muscle' },
+    'کات':       { icon: '', cls: 'fit-cut', label: 'Cut' },
+    'حجم‌گیری': { icon: '', cls: 'fit-bulk', label: 'Bulk' },
+    'تعادل':     { icon: '', cls: 'fit-balance', label: 'Balanced' }
 };
 
 /* ===== 3. UTILS ===== */
@@ -424,7 +424,7 @@ function showValidationMsg(msg) {
  */
 function getFitnessLabel(food) {
     const { protein, carbs, calories } = food;
-    if (protein >= 15) return 'عضله‌سازی';
+    if (protein >= 15) return '��ضله‌سازی';
     if (calories <= 120 && carbs <= 20) return 'کات';
     if (carbs >= 40) return 'حجم‌گیری';
     return 'تعادل';
@@ -462,18 +462,18 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     const isDark = theme === 'dark';
 
-    // دکمه اصلی
+    // Main button
     const icon  = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (icon)  icon.textContent  = isDark ? '🌙' : '☀️';
-    if (label) label.textContent = isDark ? 'تیره' : 'روشن';
+    if (icon)  icon.textContent  = isDark ? '' : '';
+    if (label) label.textContent = isDark ? 'Dark' : 'Light';
 
-    // همه دکمه‌های alt در تب‌های دیگر
+    // Alt buttons in other tabs
     document.querySelectorAll('.theme-icon-alt').forEach(el => {
-        el.textContent = isDark ? '🌙' : '☀️';
+        el.textContent = isDark ? '' : '';
     });
     document.querySelectorAll('.theme-label-alt').forEach(el => {
-        el.textContent = isDark ? 'تیره' : 'روشن';
+        el.textContent = isDark ? 'Dark' : 'Light';
     });
 }
 
@@ -599,10 +599,10 @@ function calcMatchScore(food, targetProtein, targetCarbs) {
 }
 
 function scoreBadgeLabel(score) {
-    if (score >= 95) return '🎯 عالی';
-    if (score >= 85) return '✅ خوب';
-    if (score >= 70) return '🔶 متوسط';
-    return '🔴 ضعیف';
+    if (score >= 95) return 'Excellent';
+    if (score >= 85) return 'Good';
+    if (score >= 70) return 'Fair';
+    return 'Low';
 }
 
 function findBestFoods(targetProtein, targetCarbs) {
@@ -1006,28 +1006,27 @@ function renderResults(list) {
         const fitConf  = fitnessConfig[fitKey];
         const safeName = escapeHtml(food.name);
         const safecat  = escapeHtml(food.category);
-        const emoji    = categoryEmoji[food.category] || '';
         const isFav    = isFavorite(food.name);
-        const badgeHTML = score !== null ? `<div class="match-badge">${scoreBadgeLabel(score)} — ${score}%</div>` : '';
+        const badgeHTML = score !== null ? `<div class="match-badge">${scoreBadgeLabel(score)} ${score}%</div>` : '';
 
         return `
         <article class="food-card${isFav ? ' fav-card' : ''}" style="--card-index:${index}" aria-label="${safeName}">
             <div class="card-top-row">
                 ${badgeHTML}
-                <div class="fitness-label ${fitConf.cls}">${fitConf.icon} ${fitKey}</div>
+                <div class="fitness-label ${fitConf.cls}">${fitConf.label || fitKey}</div>
             </div>
             <button class="fav-btn${isFav ? ' fav-active' : ''}" aria-pressed="${isFav}"
-                aria-label="${isFav ? `حذف ${safeName} از علاقه‌مندی‌ها` : `افزودن ${safeName} به علاقه‌مندی‌ها`}"
-            >${isFav ? '❤️' : '🤍'}</button>
+                aria-label="${isFav ? `Remove ${safeName} from favorites` : `Add ${safeName} to favorites`}"
+            >${isFav ? '&#9829;' : '&#9825;'}</button>
             <h3>${safeName}</h3>
             ${makePieChart(food.protein, food.carbs)}
-            <div class="macro"><span>پروتئین:</span><span>${food.protein} گرم</span></div>
-            <div class="macro"><span>کربوهیدرات:</span><span>${food.carbs} گرم</span></div>
-            <div class="macro"><span>کالری:</span><span>${food.calories} kcal</span></div>
-            <div class="category">${emoji} ${safecat}</div>
+            <div class="macro"><span>Protein:</span><span>${food.protein}g</span></div>
+            <div class="macro"><span>Carbs:</span><span>${food.carbs}g</span></div>
+            <div class="macro"><span>Calories:</span><span>${food.calories}kcal</span></div>
+            <div class="category">${safecat}</div>
             <div class="card-actions">
-                <button class="add-compare-btn" aria-label="افزودن ${safeName} به مقایسه">افزودن به مقایسه</button>
-                <button class="add-meal-btn" data-name="${safeName}" aria-label="افزودن ${safeName} به وعده">+ وعده</button>
+                <button class="add-compare-btn" aria-label="Add ${safeName} to compare">Add to Compare</button>
+                <button class="add-meal-btn" data-name="${safeName}" aria-label="Add ${safeName} to meal">+ Meal</button>
             </div>
         </article>`;
     }).join('');
@@ -1064,13 +1063,13 @@ function isFavorite(foodName) {
     return favorites.has(foodName);
 }
 
-/** آپدیت دکمه heart روی کارت بدون re-render کامل */
+/** Update heart button on card without full re-render */
 function updateFavBtn(btn, foodName) {
     const active = isFavorite(foodName);
     btn.setAttribute('aria-pressed', String(active));
-    btn.setAttribute('aria-label', active ? `حذف ${foodName} از علاقه‌مندی‌ها` : `افزودن ${foodName} به علاقه‌مندی‌ها`);
+    btn.setAttribute('aria-label', active ? `Remove ${foodName} from favorites` : `Add ${foodName} to favorites`);
     btn.classList.toggle('fav-active', active);
-    btn.textContent = active ? '❤️' : '🤍';
+    btn.innerHTML = active ? '&#9829;' : '&#9825;';
 }
 
 function initFavorites() {
@@ -1324,28 +1323,28 @@ function showMealPicker(foodName) {
     picker.setAttribute('aria-label', 'انتخاب وعده غذایی');
 
     picker.innerHTML = `
-        <div class="meal-picker-title">اضافه کردن <span class="meal-picker-foodname">${escapeHtml(food.name)}</span></div>
+        <div class="meal-picker-title">Add <span class="meal-picker-foodname">${escapeHtml(food.name)}</span></div>
 
         <div class="meal-picker-gram-row">
-            <label class="meal-picker-gram-label" for="mealPickerGrams">مقدار (گرم):</label>
+            <label class="meal-picker-gram-label" for="mealPickerGrams">Amount (grams):</label>
             <div class="meal-picker-gram-ctrl">
-                <button class="gram-step-btn" data-step="-10" aria-label="کم کردن ۱۰ گرم">−</button>
-                <input class="meal-picker-gram-input" id="mealPickerGrams" type="text" placeholder="1 تا 1000" inputmode="numeric" autocomplete="off" value="">
-                <button class="gram-step-btn" data-step="10" aria-label="افزودن ۱۰ گرم">+</button>
+                <button class="gram-step-btn" data-step="-10" aria-label="Decrease 10g">-</button>
+                <input class="meal-picker-gram-input" id="mealPickerGrams" type="text" placeholder="1-1000" inputmode="numeric" autocomplete="off" value="">
+                <button class="gram-step-btn" data-step="10" aria-label="Increase 10g">+</button>
             </div>
             <div class="meal-picker-preview" id="mealPickerPreview">
-                💪 —g پروتئین · 🌾 —g کربو · 🔥 — kcal
+                P: --g / C: --g / --kcal
             </div>
             <div class="meal-picker-gram-warn" id="mealPickerWarn"></div>
         </div>
 
-        <div class="meal-picker-title meal-picker-title--small">انتخاب وعده:</div>
+        <div class="meal-picker-title meal-picker-title--small">Select meal:</div>
         ${Object.entries(mealKeys).map(([key, label]) => `
             <button class="meal-picker-opt" data-meal="${escapeHtml(key)}" role="menuitem">
-                ${mealIcons[key]} ${escapeHtml(label)}
+                ${escapeHtml(label)}
             </button>
         `).join('')}
-        <button class="meal-picker-close" role="menuitem">انصراف</button>
+        <button class="meal-picker-close" role="menuitem">Cancel</button>
     `;
 
     overlay.appendChild(picker);
@@ -1359,11 +1358,11 @@ function showMealPicker(foodName) {
 
     function renderPreview(grams) {
         if (!grams || grams < 1) {
-            preview.innerHTML = `💪 —g پروتئین · 🌾 —g کربو · 🔥 — kcal`;
+            preview.innerHTML = `P: --g / C: --g / --kcal`;
             return;
         }
         const r = grams / 100;
-        preview.innerHTML = `💪 ${(food.protein * r).toFixed(1)}g پروتئین · 🌾 ${(food.carbs * r).toFixed(1)}g کربو · 🔥 ${Math.round(food.calories * r)} kcal`;
+        preview.innerHTML = `P: ${(food.protein * r).toFixed(1)}g / C: ${(food.carbs * r).toFixed(1)}g / ${Math.round(food.calories * r)}kcal`;
     }
 
     function getVal() { return parseInt(gramInput.value, 10); }
@@ -1371,12 +1370,12 @@ function showMealPicker(foodName) {
     function tryAdd(mealKey) {
         const val = getVal();
         if (!val || val < 1 || isNaN(val)) {
-            warn.textContent = '⚠ مقدار باید بین ۱ تا ۱۰۰۰ گرم باشد';
+            warn.textContent = 'Amount must be between 1 and 1000g';
             gramInput.focus();
             return;
         }
         if (val > 1000) {
-            warn.textContent = '⚠ مقدار باید بین ۱ تا ۱۰۰۰ گرم باشد';
+            warn.textContent = 'Amount must be between 1 and 1000g';
             gramInput.focus();
             return;
         }
@@ -1843,9 +1842,9 @@ function renderFavoritesTab() {
     if (!list.length) {
         grid.innerHTML = `
             <div class="fav-empty">
-                <span class="fav-empty-icon">🤍</span>
-                <p class="fav-empty-title">هنوز چیزی اضافه نکردی</p>
-                <p class="fav-empty-desc">روی ❤️ روی هر کارت بزن تا اینجا ذخیره بشه</p>
+                <span class="fav-empty-icon">&#9825;</span>
+                <p class="fav-empty-title">No favorites yet</p>
+                <p class="fav-empty-desc">Click the heart on any card to save it here</p>
             </div>`;
         return;
     }
@@ -1853,28 +1852,26 @@ function renderFavoritesTab() {
     grid.innerHTML = list.map((food, i) => {
         const fitKey  = getFitnessLabel(food);
         const fitConf = fitnessConfig[fitKey];
-        const emoji   = categoryEmoji[food.category] || '';
         const safe    = escapeHtml(food.name);
         const safecat = escapeHtml(food.category);
         return `
         <article class="fav-card-item" style="--card-index:${i}">
             <div class="fav-card-top">
                 <div class="fav-card-name-row">
-                    <span class="fav-card-emoji" aria-hidden="true">${emoji}</span>
                     <h3 class="fav-card-name">${safe}</h3>
                 </div>
-                <button class="fav-remove-btn" data-name="${safe}">❤️</button>
+                <button class="fav-remove-btn" data-name="${safe}">&#9829;</button>
             </div>
-            <div class="fav-fitness-badge ${fitConf.cls}">${fitConf.icon} ${fitKey}</div>
+            <div class="fav-fitness-badge ${fitConf.cls}">${fitConf.label || fitKey}</div>
             <div class="fav-macros">
                 <div class="fav-macro-item">
                     <span class="fav-macro-val protein-color">${food.protein}g</span>
-                    <span class="fav-macro-lbl">پروتئین</span>
+                    <span class="fav-macro-lbl">Protein</span>
                 </div>
                 <div class="fav-macro-divider"></div>
                 <div class="fav-macro-item">
                     <span class="fav-macro-val carbs-color">${food.carbs}g</span>
-                    <span class="fav-macro-lbl">کربو</span>
+                    <span class="fav-macro-lbl">Carbs</span>
                 </div>
                 <div class="fav-macro-divider"></div>
                 <div class="fav-macro-item">
@@ -1884,7 +1881,7 @@ function renderFavoritesTab() {
             </div>
             <div class="fav-card-footer">
                 <span class="fav-card-cat">${safecat}</span>
-                <button class="fav-add-meal-btn" data-name="${safe}">+ وعده</button>
+                <button class="fav-add-meal-btn" data-name="${safe}">+ Meal</button>
             </div>
         </article>`;
     }).join('');
@@ -1897,7 +1894,7 @@ function initFavoritesTab() {
         renderFavoritesTab();
         document.querySelectorAll('.fav-btn').forEach(btn => {
             btn.classList.remove('fav-active');
-            btn.textContent = '🤍';
+            btn.innerHTML = '&#9825;';
             btn.closest('.food-card')?.classList.remove('fav-card');
         });
     });
@@ -1931,7 +1928,89 @@ function initFavoritesTab() {
     });
 }
 
-/* ===== 11. INIT ===== */
+/* ===== 11. CUSTOM CURSOR ===== */
+function initCursor() {
+    // Only on devices with hover capability
+    if (window.matchMedia('(hover: none)').matches) return;
+    
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor';
+    document.body.appendChild(cursor);
+    
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    // Smooth cursor animation
+    function animateCursor() {
+        const ease = 0.15;
+        cursorX += (mouseX - cursorX) * ease;
+        cursorY += (mouseY - cursorY) * ease;
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+    
+    // Hover effect on interactive elements
+    const interactiveSelectors = 'a, button, input, select, .food-card, .filter-btn, .tab-btn, .planner-item';
+    document.querySelectorAll(interactiveSelectors).forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+    
+    // Update for dynamically added elements
+    const observer = new MutationObserver(() => {
+        document.querySelectorAll(interactiveSelectors).forEach(el => {
+            if (!el.dataset.cursorBound) {
+                el.dataset.cursorBound = 'true';
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            }
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+/* ===== 12. SMOOTH SCROLL ===== */
+function initSmoothScroll() {
+    // Add smooth reveal on scroll for cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements that should animate on scroll
+    document.querySelectorAll('.form-box, .filter-section, .goal-tracker').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        revealObserver.observe(el);
+    });
+    
+    // Trigger initial reveal
+    setTimeout(() => {
+        document.querySelectorAll('.form-box, .filter-section').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        });
+    }, 100);
+}
+
+/* ===== 13. INIT ===== */
 function init() {
     initTheme();
     initFavorites();
@@ -1943,6 +2022,8 @@ function init() {
     initPlanner();
     initBMR();
     initFavoritesTab();
+    initCursor();
+    initSmoothScroll();
 }
 
 if (document.readyState === 'loading') {
